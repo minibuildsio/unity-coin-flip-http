@@ -2,11 +2,15 @@
 
 This repo demonstrates how to use UnityWebRequest to make GET and POST requests. 
 
-`Assets/Scripts/CoinFlipController.cs` containers methods `balance()` and `play()` which make requests to the endpoints `/balance` and `/play`. The play request passes a `PlayRequest` object in the body of the request serialised to json and return a `PlayResponse` again deserialised from json.
+`Assets/Scripts/CoinFlipController.cs` contains methods `balance()` and `play()` which make requests to the endpoints `/balance` and `/play`. The play request passes a `PlayRequest` object in the body of the request serialised to json and return a `PlayResponse` again deserialised from json.
+
+## Run the example
+
+Open the project in Unity and press the play button.
 
 ## Start the backend
 
-The backend is a simple Python Flask app (see src/python/app.py) that will return the balance via the "/balance" endpoint and a play result via the "/play" endpoint.
+The backend is a simple Python Flask app (see `src/python/app.py`) that will return the balance via the `/balance` endpoint and a play result via the `/play` endpoint.
 
 ```bash
 # Windows
