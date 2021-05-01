@@ -1,4 +1,4 @@
-from flask import Flask, request, session
+from flask import Flask, request, session, Response
 import os
 import random
 
@@ -11,11 +11,14 @@ def balance():
 
 @app.route('/play', methods=['POST'])
 def play():
+    if request.json is None or request.json['game'] != 'coin-flip':
+        return Response("Invalid request", 400)
+
     app.balance -= 1
 
     heads = random.randint(0, 1) == 1
     
     if heads:
-        app.balance += 1
+        app.balance += 2
 
-    return { 'balance': app.balance, 'result': 'heads' if heads else 'tails', 'payout': 1 if heads else 0 }
+    return { 'balance': app.balance, 'result': 'heads' if heads else 'tails', 'payout': 2 if heads else 0 }
