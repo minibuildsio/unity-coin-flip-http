@@ -66,14 +66,16 @@ public class CoinFlipController : MonoBehaviour
 
     private IEnumerator balance()
     {
-        var request = UnityWebRequest.Get("http://localhost:5000/balance");
+        UnityWebRequest request = new UnityWebRequest("http://localhost:5000/balance");
 
         request.SetRequestHeader("Content-Type", "application/json");
+        request.downloadHandler = new DownloadHandlerBuffer();
+
         yield return request.SendWebRequest();
 
         Debug.Log("Balance: " + request.downloadHandler.text);
 
-        var balance = BalanceResponse.FromJson(request.downloadHandler.text);
+        BalanceResponse balance = BalanceResponse.FromJson(request.downloadHandler.text);
 
         setBalance(balance.balance);
     }
@@ -82,12 +84,12 @@ public class CoinFlipController : MonoBehaviour
     {
         startSpinning();
 
-        var request = new UnityWebRequest("http://localhost:5000/play", "POST");
-        var playRequest = new PlayRequest("coin-flip");
-
-        byte[] body = Encoding.UTF8.GetBytes(JsonUtility.ToJson(playRequest));
+        UnityWebRequest request = new UnityWebRequest("http://localhost:5000/play", "POST");
+        PlayRequest playRequest = new PlayRequest("coin-flip");
 
         request.SetRequestHeader("Content-Type", "application/json");
+
+        byte[] body = Encoding.UTF8.GetBytes(JsonUtility.ToJson(playRequest));
         request.uploadHandler = new UploadHandlerRaw(body);
         request.downloadHandler = new DownloadHandlerBuffer();
 
@@ -95,11 +97,11 @@ public class CoinFlipController : MonoBehaviour
 
         Debug.Log("Play: " + request.downloadHandler.text);
 
-        var response = PlayResponse.FromJson(request.downloadHandler.text);
+        PlayResponse response = PlayResponse.FromJson(request.downloadHandler.text);
 
         yield return new WaitForSeconds(1);
 
-        var heads = response.result == "heads";
+        bool heads = response.result == "heads";
 
         stopSpinning(heads);      
 
